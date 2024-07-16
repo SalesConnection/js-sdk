@@ -1,0 +1,9 @@
+!.gitignore
+
+.env
+.DS_Store
+.vscode/
+node_modules/
+dist/
+
+src/test.ts
