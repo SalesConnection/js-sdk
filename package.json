@@ -1,12 +1,12 @@
 {
-  "name": "sc-lib",
+  "name": "@salesconnection/sc-lib",
   "version": "1.0.0",
-  "description": "",
+  "description": "SC SDK",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc"
   },
-  "author": "",
+  "author": "J",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.14.10",
@@ -19,5 +19,13 @@
     "axios": "^1.7.2",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.45"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/SalesConnection/sc-lib.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SalesConnection/sc-lib/issues"
+  },
+  "homepage": "https://github.com/SalesConnection/sc-lib#readme"
 }
