@@ -17,6 +17,7 @@ export type DataTemplate = {
     category      ?: string,
     default_fields : Field[],
     dynamic_fields : Field[],
+    assetMappingCode ?: string,
 };
 
 export type WithCustomerDataTemplate = DataTemplate & {
@@ -84,6 +85,14 @@ export type AssetFilterOptions = {
     ref_id?: string,
     filter?: Filter,
     page  ?: number,
+    assetMappingCode ?: string,
+}
+
+export type UserPermissions = {
+    assign ?: any;
+    view ?: any,
+    id ?: string,
+    displayname  ?: string,
 }
 
 export enum TemplateType {
@@ -161,6 +170,15 @@ export default class SalesConnection {
             params.filter = JSON.stringify(option.filter);
         }
         return await this.call<T, PaginatedResponse<T>>('/asset', { params });
+    }
+
+    async getAssetCustomerMapping<T = BaseAsset[]>(option?: AssetFilterOptions): Promise<PaginatedResponse<T>|never> {
+        let params: any = option;
+        if (option?.filter) {
+            params.filter = JSON.stringify(option.filter);
+        }
+        
+        return await this.call<T, PaginatedResponse<T>>('/asset-mapping', { params });
     }
 
     async getProducts<T = BaseProduct[]>(): Promise<PaginatedResponse<T>|never> {
@@ -261,6 +279,38 @@ export default class SalesConnection {
             });
         } catch (error) {
             console.error(`Error fetching detail`, error);
+            throw error; // Rethrow the error for handling at higher level
+        }
+    }
+
+    // to get user account permission based on profileid passed
+    async getPermissions<T = UserPermissions>(type: TemplateType, ref_id: string): Promise<Response<T>|never> {
+        try {
+            return await this.call<T>('/data/permission', {
+                method: 'GET',
+                params: {
+                    type,
+                    ref_id,
+                }
+            });
+        } catch (error) {
+            console.error(`Error fetching permissions for ref_id ${ref_id}:`, error);
+            throw error; // Rethrow the error for handling at higher level
+        }
+    }
+
+    // to get user account permission based on profileid passed
+    async getCustomerAssignedList<T = UserPermissions>(type: TemplateType, ref_id: string): Promise<Response<T>|never> {
+        try {
+            return await this.call<T>('/data/permission/customer', {
+                method: 'GET',
+                params: {
+                    type,
+                    ref_id,
+                }
+            });
+        } catch (error) {
+            console.error(`Error fetching permissions for ref_id ${ref_id}:`, error);
             throw error; // Rethrow the error for handling at higher level
         }
     }
