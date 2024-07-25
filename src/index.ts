@@ -84,7 +84,11 @@ export type AssetFilterOptions = {
     ref_id?: string,
     filter?: Filter,
     page  ?: number,
-    assetMappingCode ?: string,
+}
+
+export type AssetMapOptions = {
+    type    : TemplateType,
+    asset_id: string,
 }
 
 export type UploadAttachmentOptions = {
@@ -116,6 +120,7 @@ export enum TemplateType {
     DF05     = 10,
     DF06     = 11,
     DF07     = 12,
+    PF       = 13,
 };
 
 export enum FieldType {
@@ -185,13 +190,8 @@ export default class SalesConnection {
         return await this.call<T, PaginatedResponse<T>>('/asset', { params });
     }
 
-    async getAssetCustomerMapping<T = BaseAsset[]>(option?: AssetFilterOptions): Promise<PaginatedResponse<T>|never> {
-        let params: any = option;
-        if (option?.filter) {
-            params.filter = JSON.stringify(option.filter);
-        }
-
-        return await this.call<T, PaginatedResponse<T>>('/asset-mapping', { params });
+    async getAssetMapping<T = string[]>(params: AssetMapOptions): Promise<Response<T>|never> {
+        return await this.call<T>('/asset-mapping', { params });
     }
 
     async getProducts<T = BaseProduct[]>(): Promise<PaginatedResponse<T>|never> {
