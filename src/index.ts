@@ -17,7 +17,6 @@ export type DataTemplate = {
     category      ?: string,
     default_fields : Field[],
     dynamic_fields : Field[],
-    assetMappingCode ?: string,
 };
 
 export type WithCustomerDataTemplate = DataTemplate & {
@@ -88,11 +87,20 @@ export type AssetFilterOptions = {
     assetMappingCode ?: string,
 }
 
-export type UserPermissions = {
-    assign ?: any;
-    view ?: any,
-    id ?: string,
-    displayname  ?: string,
+export type UploadAttachmentOptions = {
+    field: Field,
+    type : FieldType,
+    file : Blob,
+};
+
+export type PermissionStruct = {
+    user      : string[],
+    department: string[],
+}
+
+export type Permission = {
+    assign: PermissionStruct,
+    view  : PermissionStruct,
 }
 
 export enum TemplateType {
@@ -108,6 +116,11 @@ export enum TemplateType {
     DF05     = 10,
     DF06     = 11,
     DF07     = 12,
+};
+
+export enum FieldType {
+    Default = 'default',
+    Dynamic = 'dynamic',
 };
 
 export default class SalesConnection {
@@ -282,8 +295,40 @@ export default class SalesConnection {
         }
     }
 
+    async getAttachments<T = DataRefLevel>(type: TemplateType, ref_id: string): Promise<Response<T>|never> {
+        try {
+            return await this.call<T>('/data/attachment', {
+                params: {
+                    type,
+                    ref_id,
+                }
+            }, 'v2');
+        } catch (error) {
+            console.error(`Error fetching detail attachment`, error);
+            throw error; // Rethrow the error for handling at higher level
+        }
+    }
+
+    async uploadAttachment(type: TemplateType, ref_id: string, data: UploadAttachmentOptions): Promise<Response<string>>|never {
+        try {
+            let formData = new FormData();
+            formData.append('type', `${type}`);
+            formData.append('ref_id', ref_id);
+            formData.append('lbl_id', data.field.lbl_id);
+            formData.append('field_type', data.type);
+            formData.append('file', data.file);
+            return await this.call<string>('/data/attachment', {
+                method: 'POST',
+                data  : formData,
+            });
+        } catch (error) {
+            console.error(`Error uploading attachment for ref_id ${ref_id}:`, error);
+            throw error; // Rethrow the error for handling at higher level
+        }
+    }
+
     // to get user account permission based on profileid passed
-    async getPermissions<T = UserPermissions>(type: TemplateType, ref_id: string): Promise<Response<T>|never> {
+    async getPermissions<T = Permission>(type: TemplateType, ref_id: string): Promise<Response<T>|never> {
         try {
             return await this.call<T>('/data/permission', {
                 method: 'GET',
@@ -298,22 +343,61 @@ export default class SalesConnection {
         }
     }
 
-    private async call<T = any, R = Response<T>>(path: string, options: AxiosRequestConfig = {}): Promise<R|never> {
+    async savePermissions(type: TemplateType, ref_id: string, perm: Permission): Promise<Response<Boolean>|never> {
+        try {
+            return await this.call<Boolean>('/data/permission', {
+                method: 'PATCH',
+                params: {
+                    type,
+                    ref_id,
+                },
+                data: perm
+            });
+        } catch (error) {
+            console.error(`Error updating permissions for ref_id ${ref_id}:`, error);
+            throw error; // Rethrow the error for handling at higher level
+        }
+    }
+
+    async getUsers<T = string[]>(): Promise<Response<T>|never> {
+        try {
+            return await this.call<T>('/users', {
+                method: 'GET',
+            });
+        } catch (error) {
+            console.error(`Error fetching user list:`, error);
+            throw error; // Rethrow the error for handling at higher level
+        }
+    }
+
+    async getDepartments<T = string[]>(): Promise<Response<T>|never> {
+        try {
+            return await this.call<T>('/departments', {
+                method: 'GET',
+            });
+        } catch (error) {
+            console.error(`Error fetching department list:`, error);
+            throw error; // Rethrow the error for handling at higher level
+        }
+    }
+
+    private async call<T = any, R = Response<T>>(path: string, options: AxiosRequestConfig = {}, version: string = 'v1'): Promise<R|never> {
         options.method  = options.method || 'GET';
         options.headers = {
             key    : this.apiKey,
             secret : this.apiSecret,
             ...options.headers
         }
-        let resp = await axios(this.url(path), options);
+        let resp = await axios(this.url(path, version), options);
         return resp.data as R;
     }
 
-    private url(path: string): string {
+    private url(path: string, version: string = 'v1'): string {
         let url = this.baseUrl;
         if (!url.endsWith('/')) {
             url += '/';
         }
+        url = `${url}${version}/`;
         if (path.startsWith('/')) {
             path = path.substring(1);
         }
@@ -329,7 +413,7 @@ export class FieldHelper {
     }
 
     setValue(lbl_id: string, value: any) {
-        let field = this.fields.find(f => f.lbl_id == lbl_id);
+        let field = this.getField(lbl_id);
         if (field) {
             field.value = value;
         }
@@ -337,7 +421,7 @@ export class FieldHelper {
     }
 
     setValueByLabel(label: string, value: any) {
-        let field = this.fields.find(f => f.label == label);
+        let field = this.getFieldByLabel(label);
         if (field) {
             field.value = value;
         }
@@ -345,13 +429,21 @@ export class FieldHelper {
     }
 
     getValue(lbl_id: string) {
-        let field = this.fields.find(f => f.lbl_id == lbl_id);
+        let field = this.getField(lbl_id);
         return field?.value;
     }
 
     getValueByLabel(label: string) {
-        let field = this.fields.find(f => f.label == label);
+        let field = this.getFieldByLabel(label);
         return field?.value;
+    }
+
+    getField(lbl_id: string): Field | undefined {
+        return this.fields.find(f => f.lbl_id == lbl_id);
+    }
+
+    getFieldByLabel(label: string): Field | undefined {
+        return this.fields.find(f => f.label == label);
     }
 }
 
