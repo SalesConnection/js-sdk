@@ -177,7 +177,7 @@ export default class SalesConnection {
         if (option?.filter) {
             params.filter = JSON.stringify(option.filter);
         }
-        
+
         return await this.call<T, PaginatedResponse<T>>('/asset-mapping', { params });
     }
 
@@ -252,7 +252,6 @@ export default class SalesConnection {
         }
     }
 
-    // Need to check and correct this code -- JAY
     async statusLogData<T = UpdateLog>(type: TemplateType, ref_id: string, status: string): Promise<Response<T>|never> {
         try {
             return await this.call<T>('/data/status/log', {
@@ -287,22 +286,6 @@ export default class SalesConnection {
     async getPermissions<T = UserPermissions>(type: TemplateType, ref_id: string): Promise<Response<T>|never> {
         try {
             return await this.call<T>('/data/permission', {
-                method: 'GET',
-                params: {
-                    type,
-                    ref_id,
-                }
-            });
-        } catch (error) {
-            console.error(`Error fetching permissions for ref_id ${ref_id}:`, error);
-            throw error; // Rethrow the error for handling at higher level
-        }
-    }
-
-    // to get user account permission based on profileid passed
-    async getCustomerAssignedList<T = UserPermissions>(type: TemplateType, ref_id: string): Promise<Response<T>|never> {
-        try {
-            return await this.call<T>('/data/permission/customer', {
                 method: 'GET',
                 params: {
                     type,
@@ -353,8 +336,21 @@ export class FieldHelper {
         return this;
     }
 
+    setValueByLabel(label: string, value: any) {
+        let field = this.fields.find(f => f.label == label);
+        if (field) {
+            field.value = value;
+        }
+        return this;
+    }
+
     getValue(lbl_id: string) {
         let field = this.fields.find(f => f.lbl_id == lbl_id);
+        return field?.value;
+    }
+
+    getValueByLabel(label: string) {
+        let field = this.fields.find(f => f.label == label);
         return field?.value;
     }
 }
