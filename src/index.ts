@@ -3,13 +3,16 @@ import moment, { Moment } from 'moment';
 import 'moment-timezone';
 
 interface Filter {
-    default_fields?: { lbl_id: string, operator: string, value: any }[];
-    dynamic_fields?: { lbl_id: string, operator: string, value: any }[];
-    ref_id        ?: any;
-    name          ?: any;
-    source_type   ?: TemplateType;
-    source_id     ?: any;
-    seq_no        ?: string;
+    default_fields ?: { lbl_id: string, operator: string, value: any }[];
+    dynamic_fields ?: { lbl_id: string, operator: string, value: any }[];
+    ref_id         ?: any;
+    name           ?: any;
+    source_type    ?: TemplateType;
+    source_id      ?: any;
+    seq_no         ?: string;
+    deal_seq_no    ?: string;
+    customer_seq_no?: string;
+    activity_seq_no?: string;
 }
 
 export type DataTemplate = {
@@ -24,8 +27,10 @@ export type WithCustomerDataTemplate = DataTemplate & {
 };
 
 export type DataLevel = DataTemplate & {
-    id    : string,
-    seq_no: string,
+    id      : string,
+    seq_no  : string,
+    category: string,
+    status  : string,
 };
 
 export type UpdateLog = {
@@ -37,8 +42,16 @@ export type DataRef = {
     type  : number | string,
 }
 
+export type SourceRef = {
+    ref_id: string,
+    type  : number,
+}
+
 export type DataRefLevel = DataTemplate & DataRef & {
-    seq_no : string,
+    seq_no   : string,
+    source  ?: SourceRef,
+    category : string,
+    status   : string,
 };
 
 export type Field<T=any> = {
