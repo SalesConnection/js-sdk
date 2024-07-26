@@ -18,12 +18,10 @@ interface Filter {
 export type DataTemplate = {
     type           : string,
     category      ?: string,
+    customer_id   ?: string | number,
+    deal_id       ?: string | number,
     default_fields : Field[],
     dynamic_fields : Field[],
-};
-
-export type WithCustomerDataTemplate = DataTemplate & {
-    customer_id ?: string,
 };
 
 export type DataLevel = DataTemplate & {
