@@ -97,6 +97,14 @@ export type AssetFilterOptions = {
     page  ?: number,
 }
 
+export type SyncAssetAttachListOptions = {
+    data: {
+        type  : TemplateType,
+        ref_id: string,
+        assets: string[],
+    }
+}
+
 export type AssetMapOptions = {
     type    : TemplateType,
     asset_id: string,
@@ -203,6 +211,18 @@ export default class SalesConnection {
 
     async getAssetMapping<T = string[]>(params: AssetMapOptions): Promise<Response<T>|never> {
         return await this.call<T>('/asset-mapping', { params });
+    }
+
+    async syncAttachAssetList(option: SyncAssetAttachListOptions): Promise<Response<Boolean>|never> {
+        try {
+            return await this.call<Boolean>('/asset-attach-list', {
+                method: 'PATCH',
+                data  : option.data
+            });
+        } catch (error) {
+            console.error(`Error syncing attach asset list`, error);
+            throw error; // Rethrow the error for handling at higher level
+        }
     }
 
     async getProducts<T = BaseProduct[]>(): Promise<PaginatedResponse<T>|never> {
