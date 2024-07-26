@@ -3,8 +3,8 @@ import moment, { Moment } from 'moment';
 import 'moment-timezone';
 
 interface Filter {
-    default_fields ?: { lbl_id: string, operator: string, value: any }[];
-    dynamic_fields ?: { lbl_id: string, operator: string, value: any }[];
+    default_fields ?: { lbl_id: string, operator: SearchOperator, value: any }[];
+    dynamic_fields ?: { lbl_id: string, operator: SearchOperator, value: any }[];
     ref_id         ?: any;
     name           ?: any;
     source_type    ?: TemplateType;
@@ -146,6 +146,15 @@ export enum FieldType {
     Default = 'default',
     Dynamic = 'dynamic',
 };
+
+export enum SearchOperator {
+    Equal            = 'eq',
+    NotEqual         = 'ne',
+    LessThan         = 'lt',
+    GreaterThan      = 'gt',
+    LessThanEqual    = 'lte',
+    GreaterThanEqual = 'gte',
+}
 
 export default class SalesConnection {
     private readonly baseUrl  : string;
