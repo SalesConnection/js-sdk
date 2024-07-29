@@ -22,6 +22,10 @@ export type DataTemplate = {
     deal_id       ?: string | number,
     default_fields : Field[],
     dynamic_fields : Field[],
+    source ?: {
+        ref_id : string,
+        type : TemplateType,
+    }
 };
 
 export type DataLevel = DataTemplate & {
@@ -287,7 +291,7 @@ export default class SalesConnection {
         update_date = update_date ?? moment.tz('Asia/Kuala_Lumpur');
 
         try {
-            await this.call('/data/status', {
+            const res = await this.call('/data/status', {
                 method: 'PATCH',
                 params: {
                     type,
@@ -298,6 +302,7 @@ export default class SalesConnection {
                     status,
                 }
             });
+            console.log(res);
             return true;
         } catch (error) {
             console.error(`Error update status process`, error);
