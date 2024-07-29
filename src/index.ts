@@ -503,7 +503,7 @@ export class CallbackHelper {
         return await axios.post(this.url, { status: 2 });
     }
 
-    async fail() {
-        return await axios.post(this.url, { status: -1 });
+    async fail(error_code: string = '') {
+        return await axios.post(this.url, { status: -1, error_code });
     }
 }
