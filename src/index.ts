@@ -36,7 +36,8 @@ export type DataLevel = DataTemplate & {
 };
 
 export type UpdateLog = {
-    datetime: string,
+    name    ?: string,
+    datetime : string,
 }
 
 export type DataRef = {
@@ -80,6 +81,11 @@ export type BaseProduct = BaseData & {
 export type Response<T = any> = {
     data  : T,
     error?: any[],
+}
+
+export type PaginatedRequst = {
+    page ?: number,
+    limit?: number,
 }
 
 export type PaginatedResponse<T = any> = Response<T> & {
@@ -319,6 +325,19 @@ export default class SalesConnection {
                     ref_id,
                     status, // Include status in params
                 },
+            });
+        } catch (error) {
+            console.error(`Error updating status process`, error);
+            throw error; // Rethrow the error for handling at a higher level
+        }
+    }
+
+    async allStatusLog<T = (UpdateLog & { name : string })[]>(type: TemplateType, ref_id: string, option : PaginatedRequst = {}): Promise<Response<T>|never> {
+        try {
+            let params: any = Object.assign({}, option, { type, ref_id });
+            return await this.call<T>('/data/status/all-logs', {
+                method: 'GET',
+                params,
             });
         } catch (error) {
             console.error(`Error updating status process`, error);
