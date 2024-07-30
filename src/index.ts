@@ -423,6 +423,22 @@ export default class SalesConnection {
         }
     }
 
+    async saveComment(type: TemplateType, ref_id: string, content: string): Promise<Response<any>|never> {
+        try {
+            return await this.call<Boolean>('/add-comment', {
+                method: 'POST',
+                data: {
+                    type,
+                    ref_id,
+                    content
+                }
+            });
+        } catch (error) {
+            console.error(`Error adding comment for ref_id ${ref_id}:`, error);
+            throw error; // Rethrow the error for handling at higher level
+        }
+    }
+
     async getUsers<T = string[]>(): Promise<Response<T>|never> {
         try {
             return await this.call<T>('/users', {
