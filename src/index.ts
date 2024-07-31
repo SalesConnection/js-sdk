@@ -107,6 +107,11 @@ export type AssetFilterOptions = {
     page  ?: number,
 }
 
+export type CheckInOutOptions = {
+    start?: Moment,
+    end  ?: Moment,
+}
+
 export type SyncAssetAttachListOptions = {
     data: {
         type  : TemplateType,
@@ -435,6 +440,29 @@ export default class SalesConnection {
             });
         } catch (error) {
             console.error(`Error adding comment for ref_id ${ref_id}:`, error);
+            throw error; // Rethrow the error for handling at higher level
+        }
+    }
+
+    async getJobTravelList(ref_id: string, options?: CheckInOutOptions): Promise<Response<any>|never> {
+        try {
+            let params: any = {
+                type: TemplateType.Job,
+                ref_id,
+            };
+            if (options && options.start) {
+                params.start = options.start.format('YYYY-MM-DD HH:mm:ss');
+            }
+            if (options && options.end) {
+                params.end = options.end.format('YYYY-MM-DD HH:mm:ss');
+            }
+            console.log(params);
+            return await this.call<Boolean>('/data/checkin', {
+                method: 'GET',
+                params
+            });
+        } catch (error) {
+            console.error(`Error fetching travel list for ref_id ${ref_id}:`, error);
             throw error; // Rethrow the error for handling at higher level
         }
     }
