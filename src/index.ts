@@ -50,9 +50,15 @@ export type SourceRef = {
     type  : number,
 }
 
+export type ProductRef = {
+    amount   ?: number,
+    currency ?: string,
+}
+
 export type DataRefLevel = DataTemplate & DataRef & {
     seq_no   : string,
     source  ?: SourceRef,
+    product ?: ProductRef,
     category : string,
     status   : string,
 };
