@@ -20,6 +20,7 @@ export type DataTemplate = {
     category      ?: string,
     customer_id   ?: string | number,
     deal_id       ?: string | number,
+    activity_id   ?: string | number,
     default_fields : Field[],
     dynamic_fields : Field[],
     source ?: {
