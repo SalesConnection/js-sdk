@@ -58,11 +58,13 @@ export type ProductRef = {
 }
 
 export type DataRefLevel = DataTemplate & DataRef & {
-    seq_no   : string,
-    source  ?: SourceRef,
-    product ?: ProductRef,
-    category : string,
-    status   : string,
+    seq_no         : string,
+    source        ?: SourceRef,
+    product       ?: ProductRef,
+    category       : string,
+    status         : string,
+    pdf_url       ?: string | null,
+    public_pdf_url?: string | null,
 };
 
 export type Field<T=any> = {
