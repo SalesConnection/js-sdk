@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import moment, { Moment } from 'moment';
 import 'moment-timezone';
+import { URL } from 'url';
 
 interface Filter {
     default_fields ?: { lbl_id: string, operator: SearchOperator, value: any }[];
@@ -133,10 +134,15 @@ export type AssetMapOptions = {
 }
 
 export type UploadAttachmentOptions = {
-    field: Field,
-    type : FieldType,
-    file : Blob,
-};
+    field    : Field,
+    type     : FieldType,
+    filetype : "file" | "link",
+    replace ?: boolean,
+    filename?: string,
+} & (
+    | { filetype: "file", file: Blob }
+    | { filetype: "link", link: URL }
+);
 
 export type PermissionStruct = {
     user      : string[],
@@ -392,7 +398,15 @@ export default class SalesConnection {
             formData.append('ref_id', ref_id);
             formData.append('lbl_id', data.field.lbl_id);
             formData.append('field_type', data.type);
-            formData.append('file', data.file);
+            if (data.filetype == "file") {
+                formData.append('file', data.file);
+            } else {
+                formData.append('link', data.link.toString());
+            }
+            formData.append('replace', (data.replace ?? false) ? '1' : '0');
+            if (data.filename) {
+                formData.append('filename', data.filename);
+            }
             return await this.call<string>('/data/attachment', {
                 method: 'POST',
                 data  : formData,
