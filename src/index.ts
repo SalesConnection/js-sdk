@@ -88,12 +88,19 @@ export type BaseProduct = BaseData & {
     notes     : string,
 };
 
+export type CheckInOut = {
+    gps     : [ number | string, number | string ],
+    type    : 'Check-In' | 'Check-Out',
+    datetime: string | Moment,
+    name    : string,
+}
+
 export type Response<T = any> = {
     data  : T,
     error?: any[],
 }
 
-export type PaginatedRequst = {
+export type PaginatedRequest = {
     page ?: number,
     limit?: number,
 }
@@ -352,7 +359,7 @@ export default class SalesConnection {
         }
     }
 
-    async allStatusLog<T = (UpdateLog & { name : string })[]>(type: TemplateType, ref_id: string, option : PaginatedRequst = {}): Promise<Response<T>|never> {
+    async allStatusLog<T = (UpdateLog & { name : string })[]>(type: TemplateType, ref_id: string, option : PaginatedRequest = {}): Promise<Response<T>|never> {
         try {
             let params: any = Object.assign({}, option, { type, ref_id });
             return await this.call<T>('/data/status/all-logs', {
@@ -467,7 +474,7 @@ export default class SalesConnection {
         }
     }
 
-    async getJobTravelList(ref_id: string, options?: CheckInOutOptions): Promise<Response<any>|never> {
+    async getJobTravelList(ref_id: string, options?: CheckInOutOptions): Promise<Response<CheckInOut[]>|never> {
         try {
             let params: any = {
                 type: TemplateType.Job,
@@ -479,8 +486,7 @@ export default class SalesConnection {
             if (options && options.end) {
                 params.end = options.end.format('YYYY-MM-DD HH:mm:ss');
             }
-            console.log(params);
-            return await this.call<Boolean>('/data/checkin', {
+            return await this.call<CheckInOut[]>('/data/checkin', {
                 method: 'GET',
                 params
             });
