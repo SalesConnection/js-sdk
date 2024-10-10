@@ -117,6 +117,11 @@ export type SearchOptions = {
     filter  ?: Filter,
 }
 
+export type ProductFilter = {
+    type  ?: TemplateType,
+    ref_id?: string
+}
+
 export type AssetFilterOptions = {
     type  ?: TemplateType,
     ref_id?: string,
@@ -273,6 +278,10 @@ export default class SalesConnection {
 
     async getProducts<T = BaseProduct[]>(): Promise<PaginatedResponse<T>|never> {
         return await this.call<T, PaginatedResponse<T>>('/product');
+    }
+
+    async getAttachedProducts<T = BaseProduct[]>(option?: ProductFilter): Promise<PaginatedResponse<T>|never> {
+        return await this.call<T, PaginatedResponse<T>>('/product-attached');
     }
 
     async search<T = DataLevel[]>(type: TemplateType, option?: SearchOptions): Promise<PaginatedResponse<T>|never> {
