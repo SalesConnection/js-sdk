@@ -6,7 +6,7 @@
 ![NPM Downloads](https://img.shields.io/npm/d18m/%40salesconnection%2Fsc-lib)
 ![GitHub Release Date](https://img.shields.io/github/release-date/SalesConnection/sc-lib)
 ![GitHub Release](https://img.shields.io/github/v/release/SalesConnection/sc-lib)
-![NPM Version](https://img.shields.io/npm/v/%40salesconnection%2Fsc-lib)
+![NPM Version](https://img.shields.io/npm/v/%40caction%2Fsdk)
 
 # Install
 ```
