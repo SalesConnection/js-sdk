@@ -2,8 +2,21 @@
   "name": "@caction/sdk",
   "version": "2.0.2",
   "description": "Caction SDK",
-  "types": "./dist/dist.d.ts",
-  "main": "./dist/dist.js",
+  "exports": {
+    ".": {
+      "default": {
+        "types": "./dist/index.d.ts",
+        "require": "./dist/index.js"
+      }
+    },
+    "./types": {
+      "default": {
+        "types": "./dist/types/index.d.ts",
+        "require": "./dist/types/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "tsc"
   },
