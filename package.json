@@ -23,10 +23,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/SalesConnection/sc-lib.git"
+    "url": "git+ssh://git@github.com/SalesConnection/js-sdk.git"
   },
   "bugs": {
-    "url": "https://github.com/SalesConnection/sc-lib/issues"
+    "url": "https://github.com/SalesConnection/js-sdk/issues"
   },
-  "homepage": "https://github.com/SalesConnection/sc-lib#readme"
+  "homepage": "https://github.com/SalesConnection/js-sdk#readme"
 }
