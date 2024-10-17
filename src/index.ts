@@ -5,9 +5,10 @@ import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
     Permission, UpdateLog, CheckInOut, CheckInOutOptions, BaseProduct,
     SearchOptions, AttachProduct, ResponseTemplate, GetAttachProduct, ProductFilterOptions,
-    GetProduct,
-} from './types';
+    GetProduct, } from './types';
 import 'moment-timezone';
+
+export * from './types';
 
 export class SDK {
     private readonly baseUrl  : string;
