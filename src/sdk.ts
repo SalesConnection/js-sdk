@@ -3,9 +3,10 @@ import moment, { Moment } from 'moment';
 import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     DataTemplate, BaseAsset, DataLevel, DataRef, DataRefLevel, Field, AssetFilterOptions,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
-    Permission, UpdateLog, CheckInOut, CheckInOutOptions,
-    BaseProduct, SearchOptions, AttachProduct,
-    ResponseTemplate} from './types';
+    Permission, UpdateLog, CheckInOut, CheckInOutOptions, BaseProduct,
+    SearchOptions, AttachProduct, ResponseTemplate, GetAttachProduct, ProductFilterOptions,
+    GetProduct,
+} from './types';
 import 'moment-timezone';
 
 export class SDK {
@@ -86,14 +87,18 @@ export class SDK {
         }
     }
 
-    async getProducts<T = BaseProduct[]>(): Promise<PaginatedResponse<T>|never> {
-        return await this.call<T, PaginatedResponse<T>>('/product');
+    async getProducts<T = GetProduct[]>(options?: ProductFilterOptions): Promise<PaginatedResponse<T>|never> {
+        let params: any = options;
+        if (options?.filter) {
+            params.filter = JSON.stringify(options.filter);
+        }
+        return await this.call<T, PaginatedResponse<T>>('/product', { params });
     }
 
-    async getAttachedProducts<T = AttachProduct[]>(type: TemplateType, ref_id: string): Promise<ResponseTemplate<T>|never> {
+    async getAttachedProducts<T = GetAttachProduct[]>(type: TemplateType, ref_id: string): Promise<ResponseTemplate<T>|never> {
         try {
             let resp = await this._call<ResponseTemplate<T>>('/product-attached', {
-                params : {
+                params: {
                     type,
                     ref_id,
                 }
@@ -101,6 +106,23 @@ export class SDK {
             return resp.data;
         } catch (error) {
             console.error(`Error fetching attached product list`, error);
+            throw error;
+        }
+    }
+
+    async attachProduct(type: TemplateType, ref_id: string, data: AttachProduct[]): Promise<Boolean|never> {
+        try {
+            await this.call('/add-product', {
+                method: 'POST',
+                data  : {
+                    type,
+                    ref_id,
+                    data
+                }
+            });
+            return true;
+        } catch (error) {
+            console.error(`Error attaching product to resource`, error);
             throw error;
         }
     }

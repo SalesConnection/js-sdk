@@ -118,12 +118,19 @@ export type BaseProduct = BaseData & {
     notes     : string,
 };
 
+export type GetProduct = BaseProduct & {
+    uom_list: string[],
+};
+
 export type AttachProduct = BaseProduct & {
     uom_name      ?: string,
-    subtotal      ?: number,
-    tax           ?: number,
-    total         ?: number,
     dynamic_fields : Field[],
+};
+
+export type GetAttachProduct = AttachProduct & {
+    subtotal?: number,
+    tax     ?: number,
+    total   ?: number,
 };
 
 export type CheckInOut = {
@@ -164,7 +171,14 @@ export type AssetFilterOptions = {
     ref_id?: string,
     filter?: Filter,
     page  ?: number,
-}
+};
+
+export type ProductFilterOptions = {
+    page  ?: number,
+    filter?: {
+        name?: string,
+    },
+};
 
 export type CheckInOutOptions = {
     start?: Moment,
