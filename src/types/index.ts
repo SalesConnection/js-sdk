@@ -118,6 +118,11 @@ export type BaseProduct = BaseData & {
     notes     : string,
 };
 
+export type BaseLocation = {
+    id  : string,
+    type: TemplateType,
+};
+
 export type GetProduct = BaseProduct & {
     uom_list: string[],
 };
@@ -131,6 +136,8 @@ export type GetAttachProduct = AttachProduct & {
     subtotal?: number,
     tax     ?: number,
     total   ?: number,
+    from    ?: BaseLocation,
+    to      ?: BaseLocation,
 };
 
 export type CheckInOut = {
