@@ -3,9 +3,9 @@ import moment, { Moment } from 'moment';
 import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     DataTemplate, BaseAsset, DataLevel, DataRef, DataRefLevel, Field, AssetFilterOptions,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
-    Permission, UpdateLog, CheckInOut, CheckInOutOptions, BaseProduct,
-    SearchOptions, AttachProduct, ResponseTemplate, GetAttachProduct, ProductFilterOptions,
-    GetProduct, } from './types';
+    Permission, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
+    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct,
+} from './types';
 import 'moment-timezone';
 
 export * from './types';
@@ -454,6 +454,36 @@ export class CallbackHelper {
 
     async fail(error_code: string = '') {
         return await axios.post(this.url, { status: -1, error_code });
+    }
+}
+
+export function toTemplateType(type: string): TemplateType | false {
+    const WEBHOOK: { [key: string]: TemplateType } = {
+        "customer"   : TemplateType.Customer,
+        "deal"       : TemplateType.Deal,
+        "activity"   : TemplateType.Asset,
+        "asset"      : TemplateType.Asset,
+        "product"    : TemplateType.Product,
+        "DR01"       : TemplateType.DF01,
+        "DR02"       : TemplateType.DF02,
+        "DR03"       : TemplateType.DF03,
+        "DR04"       : TemplateType.DF04,
+        "DR05"       : TemplateType.DF05,
+        "DR06"       : TemplateType.DF06,
+        "DR07"       : TemplateType.DF07,
+        "public_form": TemplateType.PF,
+    };
+    if (type in WEBHOOK) {
+        return WEBHOOK[type];
+    }
+    return false;
+};
+
+export async function rescue<T = any>(callback: () => Promise<T>, def?: T): Promise<T | undefined> {
+    try {
+        return await callback();
+    } catch (error) {
+        return def;
     }
 }
 
