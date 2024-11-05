@@ -441,11 +441,11 @@ export class FieldHelper {
     }
 }
 
-export class DataHelper {
+export class DataHelper<T extends DataTemplate> {
     private default: FieldHelper;
     private dynamic: FieldHelper;
 
-    constructor(public ref: DataTemplate) {
+    constructor(public ref: T) {
         this.default = new FieldHelper(ref.default_fields);
         this.dynamic = new FieldHelper(ref.dynamic_fields);
     }
