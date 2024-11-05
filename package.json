@@ -1,6 +1,6 @@
 {
   "name": "@caction/sdk",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Caction SDK",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
