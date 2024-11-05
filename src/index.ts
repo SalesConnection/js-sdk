@@ -441,6 +441,24 @@ export class FieldHelper {
     }
 }
 
+export class DataHelper {
+    private default: FieldHelper;
+    private dynamic: FieldHelper;
+
+    constructor(public ref: DataTemplate) {
+        this.default = new FieldHelper(ref.default_fields);
+        this.dynamic = new FieldHelper(ref.dynamic_fields);
+    }
+
+    public defaultFields(): FieldHelper {
+        return this.default;
+    }
+
+    public dynamicFields(): FieldHelper {
+        return this.dynamic;
+    }
+}
+
 export class CallbackHelper {
     private url: string;
 
