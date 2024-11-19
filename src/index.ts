@@ -349,6 +349,24 @@ export class SDK {
         }
     }
 
+    async getMileageAndDuration(ref_id: string): Promise<TravelDataResponse | never> {
+        try {
+            const params: any = {
+                type: TemplateType.Job,
+                ref_id,
+            };
+
+            // Call the API endpoint
+            return await this.call<TravelDataResponse>('/data/travel', {
+                method: 'GET',
+                params,
+            });
+        } catch (error) {
+            console.error(`Error fetching travel data for ref_id ${ref_id}:`, error);
+            throw error; // Rethrow the error for higher-level handling
+        }
+    }
+
     async getUsers<T = string[]>(): Promise<Response<T>|never> {
         try {
             return await this.call<T>('/users', {

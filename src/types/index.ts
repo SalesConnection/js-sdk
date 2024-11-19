@@ -147,6 +147,16 @@ export type CheckInOut = {
     name    : string,
 };
 
+export type TravelData = {
+    duration: string;  
+    distance: number | string;
+};
+
+export type TravelDataResponse = {
+    data: TravelData;
+};
+
+
 export type Response<T = any> = {
     data  : T,
     error?: any[],
