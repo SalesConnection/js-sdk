@@ -148,8 +148,8 @@ export type CheckInOut = {
 };
 
 export type TravelData = {
-    duration: string;  
-    distance: number | string;
+    duration: string | null;  
+    distance: number | null;
 };
 
 export type TravelDataResponse = {
