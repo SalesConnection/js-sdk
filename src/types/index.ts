@@ -156,7 +156,6 @@ export type TravelDataResponse = {
     data: TravelData;
 };
 
-
 export type Response<T = any> = {
     data  : T,
     error?: any[],

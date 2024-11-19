@@ -4,7 +4,7 @@ import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     DataTemplate, BaseAsset, DataLevel, DataRef, DataRefLevel, Field, AssetFilterOptions,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
     Permission, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
-    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct,
+    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, TravelDataResponse
 } from './types';
 import 'moment-timezone';
 
@@ -349,7 +349,7 @@ export class SDK {
         }
     }
 
-    async getMileageAndDuration(ref_id: string): Promise<TravelDataResponse | never> {
+    async getMileageAndDuration(ref_id: string): Promise<Response<TravelDataResponse>|never> {
         try {
             const params: any = {
                 type: TemplateType.Job,
