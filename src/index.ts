@@ -4,7 +4,7 @@ import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     DataTemplate, BaseAsset, DataLevel, DataRef, DataRefLevel, Field, AssetFilterOptions,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
     Permission, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
-    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, TravelDataResponse
+    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct
 } from './types';
 import 'moment-timezone';
 
@@ -339,6 +339,9 @@ export class SDK {
             if (options && options.end) {
                 params.end = options.end.format('YYYY-MM-DD HH:mm:ss');
             }
+            if (options && options.travel) {
+                params.travel = 1
+            }
             return await this.call<CheckInOut[]>('/data/checkin', {
                 method: 'GET',
                 params
@@ -346,24 +349,6 @@ export class SDK {
         } catch (error) {
             console.error(`Error fetching travel list for ref_id ${ref_id}:`, error);
             throw error; // Rethrow the error for handling at higher level
-        }
-    }
-
-    async getMileageAndDuration(ref_id: string): Promise<Response<TravelDataResponse>|never> {
-        try {
-            const params: any = {
-                type: TemplateType.Job,
-                ref_id,
-            };
-
-            // Call the API endpoint
-            return await this.call<TravelDataResponse>('/data/travel', {
-                method: 'GET',
-                params,
-            });
-        } catch (error) {
-            console.error(`Error fetching travel data for ref_id ${ref_id}:`, error);
-            throw error; // Rethrow the error for higher-level handling
         }
     }
 
