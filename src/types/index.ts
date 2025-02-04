@@ -141,19 +141,13 @@ export type GetAttachProduct = AttachProduct & {
 };
 
 export type CheckInOut = {
-    gps     : [ number | string, number | string ],
-    type    : 'Check-In' | 'Check-Out',
-    datetime: string | Moment,
-    name    : string,
-};
-
-export type TravelData = {
-    duration: number | null;  
-    distance: number | null;
-};
-
-export type TravelDataResponse = {
-    data: TravelData;
+    gps            : [ number | string, number | string ] | null,
+    type           : 'Check-In' | 'Check-Out' | 'Travelling',
+    datetime       : string | Moment,
+    name           : string,
+    start_time     : string | Moment,
+    end_time       : string | Moment,
+    travel_distance: number,
 };
 
 export type Response<T = any> = {
@@ -197,8 +191,9 @@ export type ProductFilterOptions = {
 };
 
 export type CheckInOutOptions = {
-    start?: Moment,
-    end  ?: Moment,
+    start ?: Moment,
+    end   ?: Moment,
+    travel?: Boolean
 }
 
 export type SyncAssetAttachListOptions = {
