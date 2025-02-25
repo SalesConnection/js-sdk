@@ -4,7 +4,7 @@ import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     DataTemplate, BaseAsset, DataLevel, DataRef, DataRefLevel, Field, AssetFilterOptions,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
     Permission, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
-    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct
+    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistTemplate, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest
 } from './types';
 import 'moment-timezone';
 
@@ -373,6 +373,121 @@ export class SDK {
             throw error; // Rethrow the error for handling at higher level
         }
     }
+
+    /**
+     * Fetch checklist template from API.
+     *
+     * @param {string | number} type - The template type.
+     * @param {string} category - The template category.
+     * @returns {Promise<ChecklistListing>} - The API response containing checklist template data.
+     */
+    async getChecklistListing(type: string | number, category: string): Promise<ChecklistListing> {
+        try {
+            return await this.call<ChecklistListing>('/checklist-listing', {
+                params: {
+                    type,
+                    category,
+                }
+            });
+        } catch (error) {
+            console.error(`Error fetching checklist template for type ${type} and category ${category}:`, error);
+            throw error; // Rethrow for higher-level handling
+        }
+    }
+
+    /**
+     * Fetch checklist template from API.
+     *
+     * @param {string} category - The template category.
+     * @param {string} uniqueCode - The unique code for the checklist.
+     * @param {string | number} type - The template type.
+     * @returns {Promise<ChecklistTemplateResponse>} - The API response containing checklist template data.
+     */
+    async fetchChecklistTemplate(category: string, uniqueCode: string, type: string | number): Promise<ChecklistTemplateResponse> {
+        try {
+            return await this.call<ChecklistTemplateResponse>('/checklist-template', {
+                params: {
+                    category,
+                    unique_code: uniqueCode,
+                    type,
+                }
+            });
+        } catch (error) {
+            console.error('Error fetching checklist template', error);
+            throw error; // Rethrow for higher-level handling
+        }
+    }
+
+    /**
+     * Fetch checklist details from API.
+     *
+     * @param {string} category - The template category.
+     * @param {string} uniqueCode - The unique code for the checklist.
+     * @param {string | number} type - The template type.
+     * @param {string} refId - The reference ID for checklist details.
+     * @returns {Promise<ChecklistDetailsResponse>} - The API response containing checklist details.
+     */
+    async fetchChecklistDetails(category: string, uniqueCode: string, type: string | number, refId: string): Promise<ChecklistDetailsResponse> {
+        try {
+            return await this.call<ChecklistDetailsResponse>('/checklist-details', {
+                params: {
+                    category,
+                    unique_code: uniqueCode,
+                    type,
+                    ref_id: refId,
+                }
+            });
+        } catch (error) {
+            console.error(`Error fetching checklist details for category ${category}, uniqueCode ${uniqueCode}, type ${type}, and refId ${refId}:`, error);
+            throw error; // Rethrow for higher-level handling
+        }
+    }
+
+
+    /**
+     * Add or update a checklist in the system.
+     *
+     * @param {ChecklistAddUpdateRequest} checklistData - The checklist data to be sent.
+     * @returns {Promise<any>} - The API response.
+     */
+    async addUpdateChecklist(checklistData: ChecklistAddUpdateRequest): Promise<any> {
+        try {
+            return await this.call<any>('/checklist/add-update', {
+                method: 'POST',
+                data: checklistData,
+            });
+        } catch (error) {
+            console.error(`Error adding/updating checklist:`, error);
+            throw error; // Rethrow for higher-level handling
+        }
+    }
+
+    /**
+     * Delete a checklist from the system.
+     *
+     * @param {number} type - The type of the checklist (must be between 6 and 12).
+     * @param {string} uniqueCode - The unique code of the checklist.
+     * @param {string} refId - The reference ID of the checklist.
+     * @returns {Promise<any>} - The API response.
+     */
+    async deleteChecklist(type: number, uniqueCode: string, refId: string): Promise<any> {
+        try {
+            return await this.call<any>('/checklist/delete', {
+                method: 'POST',
+                params: {
+                    type,
+                    unique_code: uniqueCode,
+                    ref_id: refId,
+                }
+            });
+        } catch (error) {
+            console.error('Error deleting checklist', error);
+            throw error; // Rethrow for higher-level handling
+        }
+    }
+
+
+
 
     private async call<T = any, R = Response<T>>(path: string, options: AxiosRequestConfig = {}, version: string = 'v1'): Promise<R|never> {
         let resp = await this._call<R>(path, options, version);

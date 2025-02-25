@@ -229,3 +229,64 @@ export type Permission = {
     assign: PermissionStruct,
     view  : PermissionStruct,
 }
+
+/**
+ * Type definition for checklist APIs.
+ */
+export type ChecklistListing = {
+    type: string;
+    category: string;
+    checklists: ChecklistItem[];
+}
+
+export type ChecklistItem = {
+    unique_code: string;
+    label: string;
+}
+
+export interface ChecklistDetailsResponse {
+    data: {
+        type: number;
+        category: string;
+        unique_code: string;
+        ref_id: string;
+        checklist: ChecklistItem[];
+    };
+}
+
+export interface ChecklistAddUpdateRequest {
+    type: number;
+    category: string;
+    unique_code: string;
+    ref_id: string;
+    checklist: ChecklistItem[];
+}
+
+export interface ChecklistTemplateResponse {
+    data: {
+        type: string;
+        category: string;
+        unique_code: string;
+        ref_id: number;
+        checklist: ChecklistItem[];
+    };
+}
+
+export interface ChecklistItem {
+    column_name: string;
+    asset_id: string | null;
+    data: ChecklistField[];
+}
+
+export interface ChecklistField {
+    lbl_id: string;
+    lbl_id2: string;
+    fieldtype: string;
+    fieldlabel: string;
+    options: string[];
+    default_val: string;
+    prepopulate_value: string;
+    value: string;
+    value2: string;
+}
+
