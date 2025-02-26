@@ -4,7 +4,8 @@ import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     DataTemplate, BaseAsset, DataLevel, DataRef, DataRefLevel, Field, AssetFilterOptions,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
     Permission, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
-    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistListing, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest
+    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest,
+    ChecklistListing
 } from './types';
 import 'moment-timezone';
 
@@ -381,7 +382,7 @@ export class SDK {
      * @param {string} category - The template category.
      * @returns {Promise<ChecklistListing>} - The API response containing checklist template data.
      */
-    async getChecklistListing(type: string | number, category: string): Promise<ChecklistListing> {
+    async getChecklistListing(type: string | number, category: string): Promise<Response<ChecklistListing>> {
         try {
             return await this.call<ChecklistListing>('/checklist-listing', {
                 params: {
@@ -403,7 +404,7 @@ export class SDK {
      * @param {string | number} type - The template type.
      * @returns {Promise<ChecklistTemplateResponse>} - The API response containing checklist template data.
      */
-    async fetchChecklistTemplate(category: string, uniqueCode: string, type: string | number): Promise<ChecklistTemplateResponse> {
+    async fetchChecklistTemplate(category: string, uniqueCode: string, type: string | number): Promise<Response<ChecklistTemplateResponse>> {
         try {
             return await this.call<ChecklistTemplateResponse>('/checklist-template', {
                 params: {
@@ -427,7 +428,7 @@ export class SDK {
      * @param {string} refId - The reference ID for checklist details.
      * @returns {Promise<ChecklistDetailsResponse>} - The API response containing checklist details.
      */
-    async fetchChecklistDetails(category: string, uniqueCode: string, type: string | number, refId: string): Promise<ChecklistDetailsResponse> {
+    async fetchChecklistDetails(category: string, uniqueCode: string, type: string | number, refId: string): Promise<Response<ChecklistDetailsResponse>> {
         try {
             return await this.call<ChecklistDetailsResponse>('/checklist-details', {
                 params: {
