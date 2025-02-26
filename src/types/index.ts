@@ -236,10 +236,10 @@ export type Permission = {
 export type ChecklistListing = {
     type: string;
     category: string;
-    checklists: ChecklistItem[];
+    checklists: ChecklistListItem[];
 }
 
-export type ChecklistItem = {
+export type ChecklistListItem = {
     unique_code: string;
     label: string;
 }
