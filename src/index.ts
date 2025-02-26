@@ -4,7 +4,7 @@ import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     DataTemplate, BaseAsset, DataLevel, DataRef, DataRefLevel, Field, AssetFilterOptions,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
     Permission, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
-    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistTemplate, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest
+    ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistListing, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest
 } from './types';
 import 'moment-timezone';
 

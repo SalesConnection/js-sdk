@@ -245,13 +245,11 @@ export type ChecklistListItem = {
 }
 
 export interface ChecklistDetailsResponse {
-    data: {
-        type: number;
-        category: string;
-        unique_code: string;
-        ref_id: string;
-        checklist: ChecklistItem[];
-    };
+    type: number;
+    category: string;
+    unique_code: string;
+    ref_id: string;
+    checklist: ChecklistItem[];
 }
 
 export interface ChecklistAddUpdateRequest {
@@ -263,13 +261,12 @@ export interface ChecklistAddUpdateRequest {
 }
 
 export interface ChecklistTemplateResponse {
-    data: {
-        type: string;
-        category: string;
-        unique_code: string;
-        ref_id: number;
-        checklist: ChecklistItem[];
-    };
+
+    type: string;
+    category: string;
+    unique_code: string;
+    ref_id: number;
+    checklist: ChecklistItem[];
 }
 
 export interface ChecklistItem {
