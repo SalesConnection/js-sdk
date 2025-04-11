@@ -234,56 +234,49 @@ export type Permission = {
  * Type definition for checklist APIs.
  */
 export type ChecklistListing = {
-    type: string;
-    category: string;
+    type      : TemplateType;
+    category  : string;
     checklists: ChecklistListItem[];
 }
 
 export type ChecklistListItem = {
     unique_code: string;
-    label: string;
+    label      : string;
 }
 
 export interface ChecklistDetailsResponse {
-    type: number;
-    category: string;
+    type       : TemplateType;
+    category   : string;
     unique_code: string;
-    ref_id: string;
-    checklist: ChecklistItem[];
+    ref_id     : string;
+    checklist  : ChecklistItem[];
 }
 
 export interface ChecklistAddUpdateRequest {
-    type: number;
-    category: string;
-    unique_code: string;
-    ref_id: string;
-    checklist: ChecklistItem[];
+    checklist  : ChecklistItem[];
 }
 
 export interface ChecklistTemplateResponse {
-
-    type: string;
-    category: string;
+    type       : TemplateType;
+    category   : string;
     unique_code: string;
-    ref_id: number;
-    checklist: ChecklistItem[];
+    checklist  : ChecklistItem[];
 }
 
 export interface ChecklistItem {
     column_name: string;
-    asset_id: string | null;
-    data: ChecklistField[];
+    asset_id   : string | null;
+    data       : ChecklistField[];
 }
 
 export interface ChecklistField {
-    lbl_id: string;
-    lbl_id2: string;
-    fieldtype: string;
-    fieldlabel: string;
-    options: string[];
-    default_val: string;
+    lbl_id           : string;
+    lbl_id2          : string;
+    fieldtype        : string;
+    fieldlabel       : string;
+    options          : string[];
+    default_val      : string;
     prepopulate_value: string;
-    value: string;
-    value2: string;
+    value            : string;
+    value2           : string;
 }
-
