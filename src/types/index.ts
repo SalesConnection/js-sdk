@@ -31,6 +31,11 @@ export enum SearchOperator {
     GreaterThanEqual = 'gte',
 };
 
+export enum Ordering {
+    Asc  = 'asc',
+    Desc = 'desc',
+};
+
 export interface Filter {
     default_fields ?: { lbl_id: string, operator: SearchOperator, value: any }[];
     dynamic_fields ?: { lbl_id: string, operator: SearchOperator, value: any }[];
@@ -43,6 +48,14 @@ export interface Filter {
     customer_seq_no?: string;
     activity_seq_no?: string;
 };
+
+export type OrderBy = {
+    [key: string]: Ordering,
+}
+
+export type SearchOrderBy = OrderBy & {
+    id: Ordering,
+}
 
 export type DataTemplate = {
     type           : string,
@@ -174,6 +187,7 @@ export type PaginatedResponse<T = any> = Response<T> & {
 export type SearchOptions = {
     category?: string,
     filter  ?: Filter,
+    orderby ?: SearchOrderBy,
 };
 
 export type AssetFilterOptions = {
