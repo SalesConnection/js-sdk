@@ -494,7 +494,7 @@ export class SDK {
         }
     }
 
-    private async call<T = any, R = Response<T>>(path: string, options: AxiosRequestConfig = {}, version: string = 'v1'): Promise<R|never> {
+    async call<T = any, R = Response<T>>(path: string, options: AxiosRequestConfig = {}, version: string = 'v1'): Promise<R|never> {
         let resp = await this._call<R>(path, options, version);
         return resp.data;
     }
