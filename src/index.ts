@@ -5,7 +5,7 @@ import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
     Permission, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
     ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest,
-    ChecklistListing
+    ChecklistListing, CreateDataOptions
 } from './types';
 import 'moment-timezone';
 
@@ -144,11 +144,17 @@ export class SDK {
         });
     }
 
-    async createData<T = DataRef, R = Response<T>>(data: DataTemplate): Promise<R> {
-        const url = `${this.baseUrl}/data/create`;
+    async createData<T = DataRef, R = Response<T>>(data: DataTemplate, opt?: CreateDataOptions): Promise<R> {
+        let _opt: CreateDataOptions = {
+            noti: 1,
+            ...opt,
+        };
         try {
             return await this.call<T, R>('/data', {
                 method: 'POST',
+                params: {
+                    noti: _opt.noti,
+                },
                 data,
             });
         } catch (error) {

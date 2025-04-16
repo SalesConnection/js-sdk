@@ -184,6 +184,10 @@ export type PaginatedResponse<T = any> = Response<T> & {
     total       : number,
 };
 
+export type CreateDataOptions = {
+    noti: 1 | 0,
+};
+
 export type SearchOptions = {
     category?: string,
     filter  ?: Filter,
