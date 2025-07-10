@@ -161,6 +161,7 @@ export type CheckInOut = {
     start_time     : string | Moment,
     end_time       : string | Moment,
     travel_distance: number,
+    duration       : number,
 };
 
 export type Response<T = any> = {
