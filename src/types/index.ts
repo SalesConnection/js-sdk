@@ -101,6 +101,7 @@ export type ProductRef = {
 }
 
 export type DataRefLevel = DataTemplate & DataRef & {
+    creator       ?: string,
     seq_no         : string,
     source        ?: SourceRef,
     product       ?: ProductRef,
