@@ -212,7 +212,9 @@ export type ProductFilterOptions = {
 export type CheckInOutOptions = {
     start ?: Moment,
     end   ?: Moment,
-    travel?: Boolean
+    travel?: Boolean,
+    user  ?: string,
+    page  ?: Number,
 }
 
 export type SyncAssetAttachListOptions = {

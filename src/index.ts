@@ -334,12 +334,12 @@ export class SDK {
         }
     }
 
-    async getJobTravelList(ref_id: string, options?: CheckInOutOptions): Promise<Response<CheckInOut[]>|never> {
+    async getJobTravelList(ref_id: string, options?: CheckInOutOptions): Promise<PaginatedResponse<CheckInOut[]>|never> {
         try {
-            let params: any = {
+            let params: any = Object.assign({
                 type: TemplateType.Job,
                 ref_id,
-            };
+            }, options ?? {});
             if (options && options.start) {
                 params.start = options.start.format('YYYY-MM-DD HH:mm:ss');
             }
@@ -349,7 +349,7 @@ export class SDK {
             if (options && options.travel) {
                 params.travel = 1
             }
-            return await this.call<CheckInOut[]>('/data/checkin', {
+            return await this.call<CheckInOut[], PaginatedResponse<CheckInOut[]>>('/data/checkin', {
                 method: 'GET',
                 params
             });
