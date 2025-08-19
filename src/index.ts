@@ -139,6 +139,9 @@ export class SDK {
         if (option?.category) {
             params.category = option.category;
         }
+        if (option?.orderby) {
+            params.orderby = JSON.stringify(option.orderby);
+        }
         return await this.call<T, PaginatedResponse<T>>('/search', {
             params,
         });
