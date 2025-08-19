@@ -5,7 +5,7 @@ import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
     Permission, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
     ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest,
-    ChecklistListing, CreateDataOptions
+    ChecklistListing, CreateDataOptions, ChecklistItem, ChecklistField,
 } from './types';
 import 'moment-timezone';
 
@@ -585,6 +585,80 @@ export class DataHelper<T extends DataTemplate> {
 
     public dynamicFields(): FieldHelper {
         return this.dynamic;
+    }
+}
+
+export class ChecklistHelper {
+    public columns: ChecklistItemHelper[]
+
+    constructor(
+        public data: ChecklistDetailsResponse
+    ) {
+        this.columns = []
+        for (let item of data.checklist) {
+            this.columns.push(new ChecklistItemHelper(item))
+        }
+    }
+
+    public getColumnByAssetId(asset_id: string): ChecklistItemHelper | undefined {
+        return this.columns.find(column => column.asset_id == asset_id)
+    }
+
+    public getColumnByName(name: string): ChecklistItemHelper | undefined {
+        return this.columns.find(column => column.column_name == name)
+    }
+}
+
+export class ChecklistItemHelper {
+    constructor(
+        public item: ChecklistItem
+    ) {
+    }
+
+    get asset_id(): string | null {
+        return this.item.asset_id
+    }
+
+    get column_name(): string | null {
+        return this.item.column_name
+    }
+
+    get data(): ChecklistField[] {
+        return this.item.data
+    }
+
+    public getField(lbl_id: string): ChecklistField | undefined {
+        return this.data.find(i => i.lbl_id == lbl_id)
+    }
+
+    public getFieldByLabel(label: string): ChecklistField | undefined {
+        return this.data.find(i => i.fieldlabel == label)
+    }
+
+    public getValue(lbl_id: string): string | undefined {
+        let field = this.getField(lbl_id)
+        return field?.value
+    }
+
+    public getValueByLabel(label: string): string | undefined {
+        let field = this.getFieldByLabel(label)
+        return field?.value
+    }
+
+    public setValue(lbl_id: string, value: any) {
+        let field = this.getField(lbl_id)
+        if (field) {
+            field.value = value
+        }
+        return this;
+    }
+
+    public setValueByLabel(label: string, value: any) {
+        let field = this.getFieldByLabel(label)
+        if (field) {
+            field.value = value
+        }
+        return this;
     }
 }
 
