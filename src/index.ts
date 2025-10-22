@@ -132,6 +132,7 @@ export class SDK {
     async search<T = DataLevel[]>(type: TemplateType, option?: SearchOptions): Promise<PaginatedResponse<T>|never> {
         let params: any = {
             type,
+            page: 1
         };
         if (option?.filter) {
             params.filter = JSON.stringify(option.filter);
@@ -141,6 +142,9 @@ export class SDK {
         }
         if (option?.orderby) {
             params.orderby = JSON.stringify(option.orderby);
+        }
+        if (option?.page) {
+            params.page = option.page
         }
         return await this.call<T, PaginatedResponse<T>>('/search', {
             params,

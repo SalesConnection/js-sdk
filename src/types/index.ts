@@ -194,6 +194,7 @@ export type SearchOptions = {
     category?: string,
     filter  ?: Filter,
     orderby ?: SearchOrderBy,
+    page    ?: number,
 };
 
 export type AssetFilterOptions = {
