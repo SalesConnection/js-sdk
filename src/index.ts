@@ -366,10 +366,15 @@ export class SDK {
         }
     }
 
-    async getUsers<T = string[]>(): Promise<Response<T>|never> {
+    async getUsers<T = string[]>(expandFlag?: boolean): Promise<Response<T>|never> {
+        let expand = (expandFlag) ? expandFlag : 0;
+        
         try {
             return await this.call<T>('/users', {
                 method: 'GET',
+                params: {
+                    expand,
+                }
             });
         } catch (error) {
             console.error(`Error fetching user list:`, error);
