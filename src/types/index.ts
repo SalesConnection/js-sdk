@@ -97,6 +97,7 @@ export type ProductRef = {
     subtotal?: number,
     tax     ?: number,
     amount  ?: number,
+    outstanding ?: number,
     currency?: string,
 }
 
