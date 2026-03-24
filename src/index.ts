@@ -325,14 +325,15 @@ export class SDK {
         }
     }
 
-    async saveComment(type: TemplateType, ref_id: string, content: string): Promise<Response<any>|never> {
+    async saveComment(type: TemplateType, ref_id: string, content: string, attachments: Array<string>): Promise<Response<any>|never> {
         try {
             return await this.call<Boolean>('/add-comment', {
                 method: 'POST',
                 data: {
                     type,
                     ref_id,
-                    content
+                    content,
+                    attachments
                 }
             });
         } catch (error) {
@@ -508,6 +509,34 @@ export class SDK {
             });
         } catch (error) {
             console.error('Error deleting checklist', error);
+            throw error; // Rethrow for higher-level handling
+        }
+    }
+
+    async getRelatedIdsFromMainId(type: TemplateType, main_id: string, main_type: TemplateType): Promise<Response<string[]>> {
+        try {
+            return await this.call<string[]>('/get-related-ids', {
+                params: {
+                    type,
+                    main_id,
+                    main_type,
+                }
+            });
+        } catch (error) {
+            console.error(`Error fetching related ids from main id ${main_id} for type ${type}:`, error);
+            throw error; // Rethrow for higher-level handling
+        }
+    }
+
+    async resolveAttachmentUrl(attachment: string): Promise<Response<string>> {
+        try {
+            return await this.call<string>('/resolve-attachment-url', {
+                params: {
+                    attachment,
+                }
+            });
+        }catch (error) {
+            console.error(`Error resolving attachment url ${attachment}:`, error);
             throw error; // Rethrow for higher-level handling
         }
     }
