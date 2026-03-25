@@ -325,7 +325,7 @@ export class SDK {
         }
     }
 
-    async saveComment(type: TemplateType, ref_id: string, content: string, attachments: Array<string>): Promise<Response<any>|never> {
+    async saveComment(type: TemplateType, ref_id: string, content: string, attachment?: string[]): Promise<Response<any>|never> {
         try {
             return await this.call<Boolean>('/add-comment', {
                 method: 'POST',
@@ -333,7 +333,7 @@ export class SDK {
                     type,
                     ref_id,
                     content,
-                    attachments
+                    attachment
                 }
             });
         } catch (error) {
@@ -528,12 +528,11 @@ export class SDK {
         }
     }
 
-    async resolveAttachmentUrl(attachment: string): Promise<Response<string>> {
+    async resolveAttachmentUrl(attachment: FormData): Promise<Response<string>> {
         try {
             return await this.call<string>('/resolve-attachment-url', {
-                params: {
-                    attachment,
-                }
+                method: 'POST',
+                data: attachment,
             });
         }catch (error) {
             console.error(`Error resolving attachment url ${attachment}:`, error);
