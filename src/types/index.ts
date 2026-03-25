@@ -244,6 +244,8 @@ export type UploadAttachmentOptions = {
     | { filetype: "link", link: URL }
 );
 
+export type CommentAttachment = (string | Array<string>)[];
+
 export type PermissionStruct = {
     user      : string[],
     department: string[],

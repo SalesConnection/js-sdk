@@ -5,7 +5,7 @@ import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
     Permission, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
     ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest,
-    ChecklistListing, CreateDataOptions, ChecklistItem, ChecklistField,
+    ChecklistListing, CreateDataOptions, ChecklistItem, ChecklistField, CommentAttachment,
 } from './types';
 import 'moment-timezone';
 
@@ -325,7 +325,7 @@ export class SDK {
         }
     }
 
-    async saveComment(type: TemplateType, ref_id: string, content: string, attachment?: string[]): Promise<Response<any>|never> {
+    async saveComment(type: TemplateType, ref_id: string, content: string, attachment?: CommentAttachment): Promise<Response<any>|never> {
         try {
             return await this.call<Boolean>('/add-comment', {
                 method: 'POST',
