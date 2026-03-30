@@ -93,6 +93,11 @@ export type SourceRef = {
     type  : number,
 }
 
+export type MainRef = {
+    ref_id: string,
+    type  : number,
+}
+
 export type ProductRef = {
     subtotal?: number,
     tax     ?: number,
@@ -105,6 +110,7 @@ export type DataRefLevel = DataTemplate & DataRef & {
     creator       ?: string,
     seq_no         : string,
     source        ?: SourceRef,
+    main          ?: MainRef,
     product       ?: ProductRef,
     category       : string,
     status         : string,
