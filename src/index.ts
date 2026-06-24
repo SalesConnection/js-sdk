@@ -540,6 +540,20 @@ export class SDK {
         }
     }
 
+    async resolveHiddenDeal(customer_id: string): Promise<Response<{ deal_id: string }>> {
+        try {
+            return await this.call<{ deal_id: string }>('/resolve-hidden-deal', {
+                method: 'POST',
+                data: {
+                    customer_id
+                },
+            });
+        }catch (error) {
+            console.error(`Error resolving hidden deal for customer ${customer_id}:`, error);
+            throw error; // Rethrow for higher-level handling
+        }
+    }
+
     async call<T = any, R = Response<T>>(path: string, options: AxiosRequestConfig = {}, version: string = 'v1'): Promise<R|never> {
         let resp = await this._call<R>(path, options, version);
         return resp.data;
