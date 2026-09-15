@@ -367,14 +367,16 @@ export class SDK {
         }
     }
 
-    async getUsers<T = string[]>(expandFlag?: boolean): Promise<Response<T>|never> {
+    async getUsers<T = string[]>(expandFlag?: boolean, withRegionFlag?: boolean): Promise<Response<T>|never> {
         let expand = (expandFlag) ? expandFlag : 0;
+        let with_region = (withRegionFlag) ? withRegionFlag : 0;
         
         try {
             return await this.call<T>('/users', {
                 method: 'GET',
                 params: {
                     expand,
+                    with_region
                 }
             });
         } catch (error) {
