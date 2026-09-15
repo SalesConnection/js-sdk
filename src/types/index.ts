@@ -262,6 +262,18 @@ export type Permission = {
     view  : PermissionStruct,
 }
 
+export type UserField = {
+    lbl_id: string,
+    label : string,
+    value : string | null,
+}
+
+export type User = {
+    name  : string,
+    email : string,
+    fields: UserField[],
+}
+
 /**
  * Type definition for checklist APIs.
  */

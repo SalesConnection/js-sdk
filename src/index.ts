@@ -1,9 +1,10 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import moment, { Moment } from 'moment';
-import { TemplateType, Response, PaginatedRequest, PaginatedResponse,
+import axios,  { AxiosRequestConfig, AxiosResponse } from 'axios';
+import moment, { Moment }                            from 'moment';
+import {
+    TemplateType, Response, PaginatedRequest, PaginatedResponse,
     DataTemplate, BaseAsset, DataLevel, DataRef, DataRefLevel, Field, AssetFilterOptions,
     AssetMapOptions, SyncAssetAttachListOptions, UploadAttachmentOptions,
-    Permission, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
+    Permission, User, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
     ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest,
     ChecklistListing, CreateDataOptions, ChecklistItem, ChecklistField, CommentAttachment,
 } from './types';
@@ -22,7 +23,7 @@ export class SDK {
         this.apiSecret = apiSecret;
     }
 
-    async getCategory<T = string[]>(type: TemplateType): Promise<Response<T>|never> {
+    async getCategory<T = string[]>(type: TemplateType): Promise<Response<T> | never> {
         try {
             return await this.call<T>('/category', {
                 method: 'GET',
@@ -32,11 +33,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error fetching category for type ${type}:`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async getStatus<T = string[]>(type: TemplateType, category: string): Promise<Response<T>|never> {
+    async getStatus<T = string[]>(type: TemplateType, category: string): Promise<Response<T> | never> {
         try {
             return await this.call<T>('/status', {
                 method: 'GET',
@@ -47,11 +48,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error fetching status for type ${type}:`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async getTemplate(type: TemplateType, category: string): Promise<Response<DataTemplate>|never> {
+    async getTemplate(type: TemplateType, category: string): Promise<Response<DataTemplate> | never> {
         try {
             return await this.call<DataTemplate>('/template', {
                 params: {
@@ -61,11 +62,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error fetching template for type ${type} and category ${category}:`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async getAssets<T = BaseAsset[]>(option?: AssetFilterOptions): Promise<PaginatedResponse<T>|never> {
+    async getAssets<T = BaseAsset[]>(option?: AssetFilterOptions): Promise<PaginatedResponse<T> | never> {
         let params: any = option;
         if (option?.filter) {
             params.filter = JSON.stringify(option.filter);
@@ -73,11 +74,11 @@ export class SDK {
         return await this.call<T, PaginatedResponse<T>>('/asset', { params });
     }
 
-    async getAssetMapping<T = string[]>(params: AssetMapOptions): Promise<Response<T>|never> {
+    async getAssetMapping<T = string[]>(params: AssetMapOptions): Promise<Response<T> | never> {
         return await this.call<T>('/asset-mapping', { params });
     }
 
-    async syncAttachAssetList(option: SyncAssetAttachListOptions): Promise<Response<Boolean>|never> {
+    async syncAttachAssetList(option: SyncAssetAttachListOptions): Promise<Response<Boolean> | never> {
         try {
             return await this.call<Boolean>('/asset-attach-list', {
                 method: 'PATCH',
@@ -85,11 +86,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error syncing attach asset list`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async getProducts<T = GetProduct[]>(options?: ProductFilterOptions): Promise<PaginatedResponse<T>|never> {
+    async getProducts<T = GetProduct[]>(options?: ProductFilterOptions): Promise<PaginatedResponse<T> | never> {
         let params: any = options;
         if (options?.filter) {
             params.filter = JSON.stringify(options.filter);
@@ -97,7 +98,7 @@ export class SDK {
         return await this.call<T, PaginatedResponse<T>>('/product', { params });
     }
 
-    async getAttachedProducts<T = GetAttachProduct[]>(type: TemplateType, ref_id: string): Promise<ResponseTemplate<T>|never> {
+    async getAttachedProducts<T = GetAttachProduct[]>(type: TemplateType, ref_id: string): Promise<ResponseTemplate<T> | never> {
         try {
             let resp = await this._call<ResponseTemplate<T>>('/product-attached', {
                 params: {
@@ -112,7 +113,7 @@ export class SDK {
         }
     }
 
-    async attachProduct(type: TemplateType, ref_id: string, data: AttachProduct[]): Promise<Boolean|never> {
+    async attachProduct(type: TemplateType, ref_id: string, data: AttachProduct[]): Promise<Boolean | never> {
         try {
             await this.call('/add-product', {
                 method: 'POST',
@@ -129,7 +130,7 @@ export class SDK {
         }
     }
 
-    async search<T = DataLevel[]>(type: TemplateType, option?: SearchOptions): Promise<PaginatedResponse<T>|never> {
+    async search<T = DataLevel[]>(type: TemplateType, option?: SearchOptions): Promise<PaginatedResponse<T> | never> {
         let params: any = {
             type,
             page: 1
@@ -166,7 +167,7 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error creation process`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
@@ -176,17 +177,17 @@ export class SDK {
                 method: 'PATCH',
                 params: {
                     type,
-                    ref_id : data.ref_id,
+                    ref_id: data.ref_id,
                 },
                 data,
             });
         } catch (error) {
             console.error(`Error fetching detail`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async updateStatus(type: TemplateType, ref_id: string, status: string, update_date?: Moment): Promise<boolean|never> {
+    async updateStatus(type: TemplateType, ref_id: string, status: string, update_date?: Moment): Promise<boolean | never> {
 
         update_date = update_date ?? moment.tz('Asia/Kuala_Lumpur');
 
@@ -196,7 +197,7 @@ export class SDK {
                 params: {
                     type,
                     ref_id,
-                    update_date : update_date.format('YYYY-MM-DD HH:mm:ss')
+                    update_date: update_date.format('YYYY-MM-DD HH:mm:ss')
                 },
                 data: {
                     status,
@@ -206,27 +207,27 @@ export class SDK {
             return true;
         } catch (error) {
             console.error(`Error update status process`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async statusLogData<T = UpdateLog>(type: TemplateType, ref_id: string, status: string): Promise<Response<T>|never> {
+    async statusLogData<T = UpdateLog>(type: TemplateType, ref_id: string, status: string): Promise<Response<T> | never> {
         try {
             return await this.call<T>('/data/status/log', {
                 method: 'GET',
                 params: {
                     type,
                     ref_id,
-                    status, // Include status in params
+                    status,  // Include status in params
                 },
             });
         } catch (error) {
             console.error(`Error updating status process`, error);
-            throw error; // Rethrow the error for handling at a higher level
+            throw error;  // Rethrow the error for handling at a higher level
         }
     }
 
-    async allStatusLog<T = (UpdateLog & { name : string })[]>(type: TemplateType, ref_id: string, option : PaginatedRequest = {}): Promise<Response<T>|never> {
+    async allStatusLog<T = (UpdateLog & { name: string })[]>(type: TemplateType, ref_id: string, option: PaginatedRequest = {}): Promise<Response<T> | never> {
         try {
             let params: any = Object.assign({}, option, { type, ref_id });
             return await this.call<T>('/data/status/all-logs', {
@@ -235,11 +236,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error updating status process`, error);
-            throw error; // Rethrow the error for handling at a higher level
+            throw error;  // Rethrow the error for handling at a higher level
         }
     }
 
-    async getDetail<T = DataRefLevel>(type: TemplateType, ref_id: string): Promise<Response<T>|never> {
+    async getDetail<T = DataRefLevel>(type: TemplateType, ref_id: string): Promise<Response<T> | never> {
         try {
             return await this.call<T>('/data', {
                 params: {
@@ -249,11 +250,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error fetching detail`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async getAttachments<T = DataRefLevel>(type: TemplateType, ref_id: string): Promise<Response<T>|never> {
+    async getAttachments<T = DataRefLevel>(type: TemplateType, ref_id: string): Promise<Response<T> | never> {
         try {
             return await this.call<T>('/data/attachment', {
                 params: {
@@ -263,11 +264,11 @@ export class SDK {
             }, 'v2');
         } catch (error) {
             console.error(`Error fetching detail attachment`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async uploadAttachment(type: TemplateType, ref_id: string, data: UploadAttachmentOptions): Promise<Response<string>>|never {
+    async uploadAttachment(type: TemplateType, ref_id: string, data: UploadAttachmentOptions): Promise<Response<string>> | never {
         try {
             let formData = new FormData();
             formData.append('type', `${type}`);
@@ -289,12 +290,12 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error uploading attachment for ref_id ${ref_id}:`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    // to get user account permission based on profileid passed
-    async getPermissions<T = Permission>(type: TemplateType, ref_id: string): Promise<Response<T>|never> {
+      // to get user account permission based on profileid passed
+    async getPermissions<T = Permission>(type: TemplateType, ref_id: string): Promise<Response<T> | never> {
         try {
             return await this.call<T>('/data/permission', {
                 method: 'GET',
@@ -305,11 +306,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error fetching permissions for ref_id ${ref_id}:`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async savePermissions(type: TemplateType, ref_id: string, perm: Permission): Promise<Response<Boolean>|never> {
+    async savePermissions(type: TemplateType, ref_id: string, perm: Permission): Promise<Response<Boolean> | never> {
         try {
             return await this.call<Boolean>('/data/permission', {
                 method: 'PATCH',
@@ -321,15 +322,15 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error updating permissions for ref_id ${ref_id}:`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async saveComment(type: TemplateType, ref_id: string, content: string, attachment?: CommentAttachment): Promise<Response<any>|never> {
+    async saveComment(type: TemplateType, ref_id: string, content: string, attachment?: CommentAttachment): Promise<Response<any> | never> {
         try {
             return await this.call<Boolean>('/add-comment', {
                 method: 'POST',
-                data: {
+                data  : {
                     type,
                     ref_id,
                     content,
@@ -338,11 +339,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error adding comment for ref_id ${ref_id}:`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async getJobTravelList(ref_id: string, options?: CheckInOutOptions): Promise<PaginatedResponse<CheckInOut[]>|never> {
+    async getJobTravelList(ref_id: string, options?: CheckInOutOptions): Promise<PaginatedResponse<CheckInOut[]> | never> {
         try {
             let params: any = Object.assign({
                 type: TemplateType.Job,
@@ -363,40 +364,50 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error fetching travel list for ref_id ${ref_id}:`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async getUsers<T = string[]>(expandFlag?: boolean, withRegionFlag?: boolean): Promise<Response<T>|never> {
+    async getUsers<T = string[]>(expandFlag?: boolean): Promise<Response<T> | never> {
         let expand = (expandFlag) ? expandFlag : 0;
-        let with_region = (withRegionFlag) ? withRegionFlag : 0;
-        
+
         try {
             return await this.call<T>('/users', {
                 method: 'GET',
                 params: {
                     expand,
-                    with_region
                 }
             });
         } catch (error) {
             console.error(`Error fetching user list:`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    async getDepartments<T = string[]>(): Promise<Response<T>|never> {
+    async getUserList<T = User>(): Promise<Response<T> | never> {
+
+        try {
+            return await this.call<T>('/users', {
+                method: 'GET',
+            }, 'v2');
+        } catch (error) {
+            console.error(`Error fetching user list:`, error);
+            throw error;  // Rethrow the error for handling at higher level
+        }
+    }
+
+    async getDepartments<T = string[]>(): Promise<Response<T> | never> {
         try {
             return await this.call<T>('/departments', {
                 method: 'GET',
             });
         } catch (error) {
             console.error(`Error fetching department list:`, error);
-            throw error; // Rethrow the error for handling at higher level
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
-    /**
+      /**
      * Fetch checklist template from API.
      *
      * @param {TemplateType} type - The template type.
@@ -413,11 +424,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error fetching checklist template for type ${type} and category ${category}:`, error);
-            throw error; // Rethrow for higher-level handling
+            throw error;  // Rethrow for higher-level handling
         }
     }
 
-    /**
+      /**
      * Fetch checklist template from API.
      *
      * @param {TemplateType} type - The template type.
@@ -436,11 +447,11 @@ export class SDK {
             });
         } catch (error) {
             console.error('Error fetching checklist template', error);
-            throw error; // Rethrow for higher-level handling
+            throw error;  // Rethrow for higher-level handling
         }
     }
 
-    /**
+      /**
      * Fetch checklist details from API.
      *
      * @param {TemplateType} type - The template type.
@@ -461,11 +472,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error fetching checklist details for category ${category}, uniqueCode ${uniqueCode}, type ${type}, and refId ${refId}:`, error);
-            throw error; // Rethrow for higher-level handling
+            throw error;  // Rethrow for higher-level handling
         }
     }
 
-    /**
+      /**
      * Add or update a checklist in the system.
      *
      * @param {ChecklistAddUpdateRequest} checklistData - The checklist data to be sent.
@@ -485,11 +496,11 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error adding/updating checklist:`, error);
-            throw error; // Rethrow for higher-level handling
+            throw error;  // Rethrow for higher-level handling
         }
     }
 
-    /**
+      /**
      * Delete a checklist from the system.
      *
      * @param {TemplateType} type - The type of the checklist (must be between 6 and 12).
@@ -511,7 +522,7 @@ export class SDK {
             });
         } catch (error) {
             console.error('Error deleting checklist', error);
-            throw error; // Rethrow for higher-level handling
+            throw error;  // Rethrow for higher-level handling
         }
     }
 
@@ -526,7 +537,7 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error fetching related ids from main id ${main_id} for type ${type}:`, error);
-            throw error; // Rethrow for higher-level handling
+            throw error;  // Rethrow for higher-level handling
         }
     }
 
@@ -534,11 +545,11 @@ export class SDK {
         try {
             return await this.call<string>('/resolve-attachment-url', {
                 method: 'POST',
-                data: attachment,
+                data  : attachment,
             });
-        }catch (error) {
+        } catch (error) {
             console.error(`Error resolving attachment url ${attachment}:`, error);
-            throw error; // Rethrow for higher-level handling
+            throw error;  // Rethrow for higher-level handling
         }
     }
 
@@ -546,17 +557,17 @@ export class SDK {
         try {
             return await this.call<{ deal_id: string }>('/resolve-hidden-deal', {
                 method: 'POST',
-                data: {
+                data  : {
                     customer_id
                 },
             });
-        }catch (error) {
+        } catch (error) {
             console.error(`Error resolving hidden deal for customer ${customer_id}:`, error);
-            throw error; // Rethrow for higher-level handling
+            throw error;  // Rethrow for higher-level handling
         }
     }
 
-    async call<T = any, R = Response<T>>(path: string, options: AxiosRequestConfig = {}, version: string = 'v1'): Promise<R|never> {
+    async call<T = any, R = Response<T>>(path: string, options: AxiosRequestConfig = {}, version: string = 'v1'): Promise<R | never> {
         let resp = await this._call<R>(path, options, version);
         return resp.data;
     }
@@ -564,8 +575,8 @@ export class SDK {
     private async _call<T = any>(path: string, options: AxiosRequestConfig = {}, version: string = 'v1'): Promise<AxiosResponse<T>> {
         options.method  = options.method || 'GET';
         options.headers = {
-            key    : this.apiKey,
-            secret : this.apiSecret,
+            key   : this.apiKey,
+            secret: this.apiSecret,
             ...options.headers
         }
         return await axios<any, AxiosResponse<T>>(this.url(path, version), options);
