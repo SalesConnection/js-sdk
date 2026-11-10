@@ -287,7 +287,7 @@ export type CommentItem = {
     asset_id    : string | null,
     created_time: string | null, 
     server_time : string | null, 
-    attachments : any[],
+    attachments : string[],
 }
 
 /**
