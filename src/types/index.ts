@@ -273,6 +273,22 @@ export type User = {
     email : string,
     fields: UserField[],
 }
+export type CommentListFilters = {
+    status?: string,
+    category?: string,
+    sub_category?: string,
+    asset_id?: string,
+}
+export type CommentItem = {
+    username    : string,
+    text        : string,
+    category    : string | null,
+    sub_category: string | null,
+    asset_id    : string | null,
+    created_time: string | null, 
+    server_time : string | null, 
+    attachments : any[],
+}
 
 /**
  * Type definition for checklist APIs.
