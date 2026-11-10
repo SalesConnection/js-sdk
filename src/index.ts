@@ -568,17 +568,18 @@ export class SDK {
         }
     }
 
-    async getCommentList(type: TemplateType, ref_id: string, filters?: CommentListFilters, page?: number, sort_by?: 'asc' | 'desc'): Promise<PaginatedResponse<CommentItem[]> | never> {
+    async getCommentList(type: TemplateType, ref_id: string, filters?: CommentListFilters): Promise<PaginatedResponse<CommentItem[]> | never> {
+        const { page, sort_by, ...filter } = filters ?? {};
         const params: any = {
             type,
             ref_id,
             page: page ?? 1,
         };
-        if (filters && Object.keys(filters).length) {
-            params.filter = JSON.stringify(filters);
-        }
         if (sort_by) {
             params.sort_by = sort_by;
+        }
+        if (Object.keys(filter).length) {
+            params.filter = JSON.stringify(filter);
         }
 
         try {

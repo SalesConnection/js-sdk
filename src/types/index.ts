@@ -274,10 +274,12 @@ export type User = {
     fields: UserField[],
 }
 export type CommentListFilters = {
-    status?: string,
-    category?: string,
+    status      ?: string,
+    category    ?: string,
     sub_category?: string,
-    asset_id?: string,
+    asset_id    ?: string,
+    sort_by     ?: 'asc' | 'desc',
+    page        ?: number,
 }
 export type CommentItem = {
     username    : string,
