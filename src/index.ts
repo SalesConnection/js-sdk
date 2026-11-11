@@ -7,6 +7,7 @@ import {
     Permission, User, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
     ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest,
     ChecklistListing, CreateDataOptions, ChecklistItem, ChecklistField, CommentAttachment,
+    CommentListFilters, CommentItem,
 } from './types';
 import 'moment-timezone';
 
@@ -563,6 +564,30 @@ export class SDK {
             });
         } catch (error) {
             console.error(`Error resolving hidden deal for customer ${customer_id}:`, error);
+            throw error;  // Rethrow for higher-level handling
+        }
+    }
+
+    async getCommentList(type: TemplateType, ref_id: string, filters?: CommentListFilters): Promise<PaginatedResponse<CommentItem[]> | never> {
+        const { page, sort_by, ...filter } = filters ?? {};
+        const params: any = {
+            type,
+            ref_id,
+            page: page ?? 1,
+        };
+        if (sort_by) {
+            params.sort_by = sort_by;
+        }
+        if (Object.keys(filter).length) {
+            params.filter = JSON.stringify(filter);
+        }
+
+        try {
+            return await this.call<CommentItem[], PaginatedResponse<CommentItem[]>>('/comment-list', {
+                params,
+            });
+        } catch (error) {
+            console.error(`Error fetching comment list for type ${type} and ref_id ${ref_id}:`, error);
             throw error;  // Rethrow for higher-level handling
         }
     }
