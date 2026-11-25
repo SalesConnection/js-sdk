@@ -292,6 +292,22 @@ export type CommentItem = {
     attachments : string[],
 }
 
+export type ForwardCommentsOptions = {
+    categories       ?: string[],
+    excludeCategories?: string[],
+    subCategory      ?: string,
+    status           ?: string,
+    assetId          ?: string,
+}
+
+export type ForwardCommentsResult = {
+    forwarded         : number,
+    skipped           : number,
+    total             : number,
+    by_category       : Record<string, number>,
+    unknown_categories: string[],
+}
+
 /**
  * Type definition for checklist APIs.
  */
