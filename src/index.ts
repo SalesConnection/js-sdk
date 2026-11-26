@@ -7,7 +7,7 @@ import {
     Permission, User, UpdateLog, CheckInOut, CheckInOutOptions, SearchOptions, AttachProduct,
     ResponseTemplate, GetAttachProduct, ProductFilterOptions, GetProduct, ChecklistTemplateResponse, ChecklistDetailsResponse, ChecklistAddUpdateRequest,
     ChecklistListing, CreateDataOptions, ChecklistItem, ChecklistField, CommentAttachment,
-    CommentListFilters, CommentItem,
+    CommentListFilters, CommentItem, ForwardCommentsOptions, ForwardCommentsResult,
 } from './types';
 import 'moment-timezone';
 
@@ -589,6 +589,42 @@ export class SDK {
         } catch (error) {
             console.error(`Error fetching comment list for type ${type} and ref_id ${ref_id}:`, error);
             throw error;  // Rethrow for higher-level handling
+        }
+    }
+
+    async forwardComments( fromType: TemplateType, fromRefId: string, toType: TemplateType, toRefId: string, options?: ForwardCommentsOptions): Promise<Response<ForwardCommentsResult> | never> {
+        let data: any = {
+            from: { type: fromType, ref_id: fromRefId },
+            to  : { type: toType,   ref_id: toRefId },
+        };
+        let filter: any = {};
+        if (options?.categories) {
+            filter.categories = options.categories;
+        }
+        if (options?.excludeCategories) {
+            filter.exclude_categories = options.excludeCategories;
+        }
+        if (options?.subCategory) {
+            filter.sub_category = options.subCategory;
+        }
+        if (options?.status) {
+            filter.status = options.status;
+        }
+        if (options?.assetId) {
+            filter.asset_id = options.assetId;
+        }
+        if (Object.keys(filter).length) {
+            data.filter = filter;
+        }
+
+        try {
+            return await this.call<ForwardCommentsResult>('/forward-comment', {
+                method: 'POST',
+                data,
+            });
+        } catch (error) {
+            console.error(`Error forwarding comments from type ${fromType} ref_id ${fromRefId} to type ${toType} ref_id ${toRefId}:`, error);
+            throw error;  // Rethrow the error for handling at higher level
         }
     }
 
